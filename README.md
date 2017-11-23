@@ -2,7 +2,7 @@
 
 An Apache ModSecurity with Core Rule Set example of virtual patching, lmstfu.com style
 
-See [lmstfu.com](lmstfu.com) for details.
+See [lmstfu.com](https://lmstfu.com) for details.
 
 This is a fairly vanilla Apache httpd configuration, with the addition
 of modsecurity and the core rule set. The project-specific stuff is in
