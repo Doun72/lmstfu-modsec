@@ -1,0 +1,56 @@
+version: '3'
+services:
+  lmstfu-node:
+    hostname: "lmstfu-node"
+    build:
+      context: ../lmstfu-node
+    image: lmstfu-node:latest
+    networks:
+     - lmstfu
+
+  lmstfu-modsec:
+    hostname: "lmstfu-modsec"
+    build: .
+    image: lmstfu-modsec:latest
+    ports:
+      - "80:80"
+      - "8000:8000"
+      ##- "443:443"
+    networks:
+     - lmstfu
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+     - lmstfu
+  
+  web:
+    hostname: "web-server"
+    build:
+      context: ../Nodegoat
+    image: nodegoat_web:latest
+    command: bash -c "node artifacts/db-reset.js && npm start"
+    expose: 
+      - "4000"
+    links:
+      - mongo
+    networks:
+      - lmstfu
+    
+  mongo:
+    image: mongo:latest
+    user: mongodb
+    expose:
+      - "27017"
+    networks: 
+      - lmstfu 
+  
+networks:
+  lmstfu:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+       - subnet: 172.28.0.0/16
